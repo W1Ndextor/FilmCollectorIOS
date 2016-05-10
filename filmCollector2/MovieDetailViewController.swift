@@ -12,8 +12,8 @@ import CoreData
 class MovieDetailViewController: UIViewController {
     
     var managedObjectContext: NSManagedObjectContext!
-    var selectedMovie: Movie?
-    var movie: Movie?
+    var selectedMovie: Student?
+    var student: Student?
 
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var directorTextField: UITextField!
@@ -31,37 +31,37 @@ class MovieDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         if let selectedMovie = selectedMovie{
-            titleTextField.text = selectedMovie.title
-            directorTextField.text = selectedMovie.director
-            ratingTextField.text = selectedMovie.rating
-            genreTextField.text = selectedMovie.genre
+            titleTextField.text = selectedMovie.fname
+            directorTextField.text = selectedMovie.lname
+            ratingTextField.text = selectedMovie.course
+            genreTextField.text = selectedMovie.gpa
             
-            title = "Update Movie"
+            title = "Update Student"
             
         } else {
-            title = "Add Movie"
+            title = "Add Student"
         }
 
         }
     
     override func viewWillDisappear(animated: Bool) {
      
-        if let selectedMovie = selectedMovie, title = titleTextField.text, director = directorTextField.text, rating = ratingTextField.text, genre = genreTextField.text {
-            selectedMovie.title = title
-            selectedMovie.director = director
-            selectedMovie.rating = rating
-            selectedMovie.genre = genre
+        if let selectedMovie = selectedMovie, fname = titleTextField.text, lname = directorTextField.text, course = ratingTextField.text, gpa = genreTextField.text {
+            selectedMovie.fname = fname
+            selectedMovie.lname = lname
+            selectedMovie.course = course
+            selectedMovie.gpa = gpa
         } else if selectedMovie == nil {
             
-            if let title = titleTextField.text, director = directorTextField.text, rating = ratingTextField.text, genre = genreTextField.text, entity = NSEntityDescription.entityForName("Movie", inManagedObjectContext: managedObjectContext) where !title.isEmpty && !director.isEmpty && !genre.isEmpty && !rating.isEmpty {
+            if let fname = titleTextField.text, lname = directorTextField.text, course = ratingTextField.text, gpa = genreTextField.text, entity = NSEntityDescription.entityForName("Student", inManagedObjectContext: managedObjectContext) where !fname.isEmpty && !lname.isEmpty && !gpa.isEmpty && !course.isEmpty {
                 
                 
-            movie = Movie(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
+            student = Student(entity: entity, insertIntoManagedObjectContext: managedObjectContext)
                 
-                movie?.title = title
-                movie?.director = director
-                movie?.genre = genre
-                movie?.rating = rating
+                student?.fname = fname
+                student?.lname = lname
+                student?.course = course
+                student?.gpa = gpa
         }
         
         }

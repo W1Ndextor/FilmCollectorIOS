@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="9525" systemVersion="14F27" minimumToolsVersion="Automatic">
-    <entity name="Movie" representedClassName=".Movie" syncable="YES">
-        <attribute name="director" attributeType="String" syncable="YES"/>
-        <attribute name="genre" attributeType="String" syncable="YES"/>
-        <attribute name="rating" attributeType="String" syncable="YES"/>
-        <attribute name="title" attributeType="String" syncable="YES"/>
+    <entity name="Student" representedClassName=".Student" syncable="YES">
+        <attribute name="course" attributeType="String" syncable="YES"/>
+        <attribute name="fname" attributeType="String" syncable="YES"/>
+        <attribute name="gpa" attributeType="String" syncable="YES"/>
+        <attribute name="lname" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Movie" positionX="-63" positionY="-18" width="128" height="105"/>
+        <element name="Student" positionX="-63" positionY="9" width="128" height="105"/>
     </elements>
 </model>

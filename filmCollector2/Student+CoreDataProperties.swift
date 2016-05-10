@@ -1,8 +1,8 @@
 //
-//  Movie+CoreDataProperties.swift
+//  Student+CoreDataProperties.swift
 //  filmCollector2
 //
-//  Created by student on 5/3/16.
+//  Created by student on 5/10/16.
 //  Copyright © 2016 Josh. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -12,11 +12,11 @@
 import Foundation
 import CoreData
 
-extension Movie {
+extension Student {
 
-    @NSManaged var title: String
-    @NSManaged var director: String
-    @NSManaged var genre: String
-    @NSManaged var rating: String
+    @NSManaged var fname: String
+    @NSManaged var course: String
+    @NSManaged var lname: String
+    @NSManaged var gpa: String
 
 }

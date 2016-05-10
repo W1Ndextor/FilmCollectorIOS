@@ -13,7 +13,7 @@ class MovieTableViewController: UITableViewController {
     
     
     var managedObjectContext: NSManagedObjectContext!
-    var movies = [Movie]()
+    var students = [Student]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,8 @@ class MovieTableViewController: UITableViewController {
         
         
         navigationItem.rightBarButtonItems = [UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "addMovie:"),
-            UIBarButtonItem(title: "Sort", style: .Plain, target: self, action: "selectSort:")
+            UIBarButtonItem(title: "Filter", style: .Plain, target: self, action: "selectFilter:"),
+
         ]
 
         reloadData()
@@ -48,33 +49,35 @@ class MovieTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    func reloadData(sortDescriptor: String? = nil) {
+    func reloadData(courseFilter: String? = nil) {
         
         //                                entity name to fetch data from
-        let fetchRequest = NSFetchRequest(entityName: "Movie")
+        let fetchRequest = NSFetchRequest(entityName: "Student")
         
         
         
-        if let sortDescriptor = sortDescriptor {
-            let sort = NSSortDescriptor(key: sortDescriptor, ascending: true)
-            fetchRequest.sortDescriptors = [sort]
+        if let courseFilter = courseFilter {//                  c yields case insensitive filter
+            let coursePredicate = NSPredicate(format: "course =[c] %@", courseFilter)
+            fetchRequest.predicate = coursePredicate
         }
+
         
         do {
             
             //returns object which is casted to array shopping list and is stored in results
             if let results = try managedObjectContext.executeFetchRequest(fetchRequest) as?
-                [Movie] {
-                    movies = results
+                [Student] {
+                    students = results
                     //not recursive reload data call, this is the call to reload data in the tableview..tableview is an actual control in the storyboard
                     tableView.reloadData()
             }
             
         } catch {
-            fatalError("There was an error fetching shopping lists!")
+            fatalError("There was an error fetching students!")
             
         }
     }
+
     
     func addMovie(sender: AnyObject?){
         if let itemsTableViewController =
@@ -89,26 +92,31 @@ class MovieTableViewController: UITableViewController {
         }
     }
     
-    func selectSort(sender: AnyObject?) {
+    func selectFilter(sender: AnyObject?) {
+        let alert = UIAlertController(title: "Filter", message: "Students", preferredStyle: .Alert)
         
-        let sheet = UIAlertController(title: "Sort", message: "Movies", preferredStyle: .ActionSheet)
+        let filterAction = UIAlertAction(title: "Filter", style: .Default) {
+            (action) -> Void in
+            
+            if let ratingTextField = alert.textFields?[0], course = ratingTextField.text {
+                self.reloadData(course)
+            }
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Default) {
+            (action) -> Void in
+            self.reloadData()
+        }
         
-        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: {(action) -> Void in }))
+        alert.addTextFieldWithConfigurationHandler { (textField) in textField.placeholder = "Course"
+        }
         
-        sheet.addAction(UIAlertAction(title: "By Title", style: .Default, handler: {(action) -> Void in
-            self.reloadData("title")
-        }))
-        sheet.addAction(UIAlertAction(title: "By Director", style: .Default, handler: {(action) -> Void in
-            self.reloadData("director")
-        }))
-        
-       
-        
-        presentViewController(sheet, animated: true, completion: nil)
-        
-        
+        alert.addAction(filterAction)
+        alert.addAction(cancelAction)
+        presentViewController(alert, animated: true, completion: nil)
     }
 
+    
+    
 
     // MARK: - Table view data source
 
@@ -119,7 +127,7 @@ class MovieTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return movies.count
+        return students.count
     }
 
     
@@ -127,13 +135,13 @@ class MovieTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieCell", forIndexPath: indexPath)
 
         // Configure the cell...
-        let movie = movies[indexPath.row]
+        let student = students[indexPath.row]
         
         //maps to title
-        cell.textLabel?.text = movie.title
+        cell.textLabel?.text = student.fname + " " + student.lname
         
         //maps to subtitle
-        cell.detailTextLabel?.text = movie.director
+        cell.detailTextLabel?.text = student.course
 
 
         
@@ -149,7 +157,7 @@ class MovieTableViewController: UITableViewController {
             MovieDetailViewController {
                 
                 //getting list selected to pass it to the new screen
-                let list = movies[indexPath.row]
+                let list = students[indexPath.row]
                 
                 itemsTableViewController.managedObjectContext = managedObjectContext
                 itemsTableViewController.selectedMovie = list
